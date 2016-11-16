@@ -1,6 +1,6 @@
 # Large data files
 politics_subreddit/*
-
+*.tar.gz
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
