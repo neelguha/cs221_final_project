@@ -40,13 +40,13 @@ random.shuffle(test_comments)
 train_features = []
 train_values = []
 print "Creating train"
+print len(train_comments)
 for i in range(len(train_comments)):
 	for j in range(i):
 		user1,comment1 = train_comments[i]
 		user2,comment2 = train_comments[j]
 		value = (user1 == user2)
 		# Calculate feature vector - right now we just look at the number of words in the intersection
-	#	print len(comment1)
 		split1 = comment1.split(" ")
 		split2 = comment2.split(" ")
 		feature = len([x for x in split1 if x in split2])
