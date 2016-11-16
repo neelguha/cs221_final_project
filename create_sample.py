@@ -19,7 +19,7 @@ for line in open("politics_subreddit/politics.tsv"):
 
 users_to_sample_from = []
 for user in user_list:
-	if len(user_list[user]) >= 100: 
+	if len(user_list[user]) >= 1000: 
 		users_to_sample_from.append(user)
 
 sampled_users = np.random.choice(users_to_sample_from,100)
