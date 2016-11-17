@@ -1,6 +1,6 @@
 import nltk
 import math
-import syllables_en.py
+import syllables_en
 
 TOKENIZER = RegexpTokenizer('(?u)\W+|\$[\d\.]+|\S+')
 SPECIAL_CHARS = ['.', ',', '!', '?']
@@ -8,8 +8,8 @@ SPECIAL_CHARS = ['.', ',', '!', '?']
 class TextStats:
 	def __init__(self, text):
 		self.text = text
-	    self.words = self.get_words()
-	    self.sentences = self.get_sentences()
+		self.words = self.get_words()
+		self.sentences = self.get_sentences()
 	 	self.char_count = float(self.get_char_count())
 	 	self.word_count = float(len(words))
 	 	self.sentence_count = float(len(sentences))
