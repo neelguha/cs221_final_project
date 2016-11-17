@@ -48,6 +48,9 @@ for track_user in users_to_track:
 			else: 
 				test_comment_features.append(extract_features(comments[i]))
 				test_values.append(user == track_user)
+	
+	#convert train_comment_features and test_comment_features from list of dicts to list of lists
+
 	logreg = LogisticRegression()
 	#print len(train_comment_features)
 	print sum(test_values)
