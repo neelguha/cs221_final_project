@@ -1,6 +1,8 @@
 import nltk
+from nltk.tokenize import RegexpTokenizer
 import math
 import syllables_en
+import spelling
 
 TOKENIZER = RegexpTokenizer('(?u)\W+|\$[\d\.]+|\S+')
 SPECIAL_CHARS = ['.', ',', '!', '?']
@@ -16,13 +18,44 @@ class TextStats:
 	 	self.syllable_count = float(self.count_syllables())
 	 	self.complex_word_count = float(self.count_complex_words())
 	 	self.avg_words_p_sentence = float(word_count/sentence_count)
+		self.word_count = float(len(self.words))
+		self.char_count = float(self.get_char_count())
+		self.sentences = self.get_sentences()
+		self.sentence_count = float(len(self.sentences))
+
+		self.spelling_err_count = 0
+		self.correct_spelling_errors()
+
+		self.complex_word_count = float(self.count_complex_words())
+		self.avg_words_p_sentence = float(self.word_count)/self.sentence_count
 	    
+	def correct_spelling_errors(self):
+		correctedWords = []
+		for word in self.words:
+			cap = word[0].isupper()
+			correction = spelling.correction(word.lower())
+			if cap:
+				correction = correction[0].upper() + correction[1:]
+			correctedWords.append(correction)
+			if word != correction:
+				self.spelling_err_count += 1
+		self.words = correctedWords
+
+	def log_word_count(self):
+		return math.log(self.word_count)
+
+	def max_word_len(self):
+		return max(len(word) for word in self.words)
+
 	# SMOG grade for readability
-	def SMOG_readability(self, stats):
+	def SMOG_readability(self):
 	    score = 0.0 
 	    if self.word_count > 0.0:
 	        score = (math.sqrt(self.complex_word_count*(30/self.sentence_count)) + 3)
 	    return score
+
+	def num_spelling_errors(self):
+		return self.spelling_err_count
 
 	def extract_entity_names(self):
 		def entity_names_helper(t):
@@ -69,21 +102,17 @@ class TextStats:
 	    return nltk.sent_tokenize(self.text)
 
 	# nltk/contrib
-	def count_syllables(self):
-	    syllableCount = 0
-	    for word in self.words:
-	        syllableCount += syllables_en.count(word)
-	    return syllableCount
+	def count_syllables(self, word):
+	    return syllables_en.count(word)
 
 	# nltk/contrib
+	# might be sketchy
 	def count_complex_words(self):
 	    complex_words = 0
 	    found = False
-	    cur_word = []
 	    
 	    for word in self.words:          
-	        cur_word.append(word)
-	        if count_syllables(cur_word)>= 3:
+	        if self.count_syllables(word)>= 3:
 	            
 	            #Checking proper nouns. If a word starts with a capital letter
 	            #and is NOT at the beginning of a sentence we don't add it
@@ -99,5 +128,4 @@ class TextStats:
 	                    complex_words += 1
 	                    found = False
 	                
-	        cur_word.remove(word)
 	    return complex_words

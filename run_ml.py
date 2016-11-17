@@ -34,6 +34,8 @@ users_to_track = np.random.choice(filtered_comments.keys(),USERS_TO_TRACK,replac
 
 # Iterate through this set of users 
 for track_user in users_to_track:
+	train_keys = set()
+	test_keys = set()
 	train_comment_features = []
 	train_values = []
 	test_comment_features = []
@@ -44,12 +46,20 @@ for track_user in users_to_track:
 		for i in range(len(comments)):
 			if i in train_indices:
 				train_comment_features.append(extract_features(comments[i]))
+				train_keys.update(d.keys())
 				train_values.append(user == track_user)
 			else: 
 				test_comment_features.append(extract_features(comments[i]))
+				test_keys.update(d.keys())
 				test_values.append(user == track_user)
 	
 	#convert train_comment_features and test_comment_features from list of dicts to list of lists
+	train_features = []
+	test_features = []
+	for d in train_comment_features:
+		train_features.append({key: d.get(key, 0) for key in train_keys})
+	for d in test_comment_features:
+		test_features.append({key: d.get(key, 0) for key in test_keys})
 
 	logreg = LogisticRegression()
 	#print len(train_comment_features)
