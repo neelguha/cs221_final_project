@@ -1,5 +1,4 @@
 from fg_util import *
-from fg_util_extra import *
 
 # Given a set of comments, returns a feature vector representing those comments
 def extract_features(comment):
@@ -10,11 +9,9 @@ def extract_features(comment):
 	readability = stats.SMOG_readability()
 	numSpellingErrors = stats.num_spelling_errors()
 	entityNames = stats.extract_entity_names()
-
-	statsExt = TextStatsExt(comment)
-	punctScore = statsExt.punctuation_score()
-	profanityScore = statsExt.profanity_score()
-	sentimentScore = statsExt.sentiment_score()
+	punctScore = stats.punctuation_score()
+	profanityScore = stats.profanity_score()
+	sentimentScore = stats.sentiment_score()
 	
 	result = {
 		'log_word_count': logWordCount,
