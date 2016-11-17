@@ -3,6 +3,10 @@ from nltk.tokenize import RegexpTokenizer
 import math
 import syllables_en
 import spelling
+from string import punctuation
+import requests
+import json
+import profanity
 
 TOKENIZER = RegexpTokenizer('(?u)\W+|\$[\d\.]+|\S+')
 SPECIAL_CHARS = ['.', ',', '!', '?']
@@ -11,6 +15,13 @@ class TextStats:
 	def __init__(self, text):
 		self.text = text
 		self.words = self.get_words()
+		self.sentences = self.get_sentences()
+	 	self.char_count = float(self.get_char_count())
+	 	self.word_count = float(len(words))
+	 	self.sentence_count = float(len(sentences))
+	 	self.syllable_count = float(self.count_syllables())
+	 	self.complex_word_count = float(self.count_complex_words())
+	 	self.avg_words_p_sentence = float(word_count/sentence_count)
 		self.word_count = float(len(self.words))
 		self.char_count = float(self.get_char_count())
 		self.sentences = self.get_sentences()
@@ -122,3 +133,28 @@ class TextStats:
 	                    found = False
 	                
 	    return complex_words
+
+	def punctuation_score(self):
+		nPunct = 0
+		punct = set(punctuation)
+		for ch in self.text:
+			if ch in punct:
+				nPunct += 1
+		return float(nPunct / self.word_count)
+
+	def profanity_score(self):
+		return len(profanity.censored_words(self.text))
+
+	def sentiment_score(self):
+		url = 'http://text-processing.com/api/sentiment/'
+		response = requests.post(url, data={'text':self.text})
+		result = response.json()
+		label = result['label']
+		score = result['probability'][label]
+		if label == 'pos':
+			score += 1
+		elif label == 'neg':
+			score *= -1
+		else:
+			score -= 0.5
+		return score
