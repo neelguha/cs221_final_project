@@ -16,7 +16,8 @@ for line in open("politics_subreddit/politics.tsv"):
 	text= text.replace("<EOS>",".")
 	user_dict = {"timestamp":timestamp,"comment_id":comment_id,"author_id":author_id,"text":text}
 	user_list[author_id].append(user_dict)
-
+print len(user_list)
+'''
 users_to_sample_from = []
 for user in user_list:
 	if len(user_list[user]) >= 1000: 
@@ -28,5 +29,5 @@ output_file = open("sampled_users.tsv","w")
 for user in sampled_users:
 	for comment in user_list[user]:
 		to_write = "%s\t%s\t%s\t%s\n" % (comment['author_id'],comment['comment_id'],comment['timestamp'],comment['text'])
-		output_file.write(to_write)
+		output_file.write(to_write)'''
 
