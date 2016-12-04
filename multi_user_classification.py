@@ -24,6 +24,7 @@ test_X = []
 test_Y = []
 i = 0
 for user in user_dict:
+	i += 1
 	num_comments = len(user_dict[user])
 	features = user_dict[user]
 	random.shuffle(features)
@@ -34,6 +35,8 @@ for user in user_dict:
 	for x in test:
 		test_X.append(x)
 		test_Y.append(user)
+	if i == 10:
+		break
 
 print "Number of training examples:",len(train_X)
 print "Number of test examples:",len(test_X)
