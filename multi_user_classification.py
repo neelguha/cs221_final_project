@@ -9,59 +9,43 @@ import random
 from feature_generator import *
 from sklearn.metrics import precision_recall_fscore_support
 
-USER_TRAIN_TEST_SIZE = 100
 verbose = True
 
 user_dict = defaultdict(list)
-all_comments = []
-all_users  = []
-for line in open("sampled_users.tsv"):
-	if line[0] == "#": continue
-	author_id,comment_id,timestamp,text = line.strip().split("\t")
-	comment_dict = {'author_id':author_id,'comment_id':comment_id,'timestamp':timestamp,'text':text}
-	user_dict[author_id].append(comment_dict)
-	all_users.append(author_id)	
-	all_comments.append(text)
+for line in open("sampled_users_features.tsv"):
+	user,comment_id,timestamp,text,feature_text = line.strip().split("\t")
+	feature_vector = feature_text.strip().split(",")
+	feature_vector = [float(x) for x in feature_vector if len(x) > 0]
+	user_dict[user].append(feature_vector)
 
-user_mappings = list(set(all_users))
-
-output_file = open("multi_user_results.csv","w")
-
-train_comment_features = []
-train_comment_users = []
-test_comment_features = []
-test_comment_users = []
+train_X = []
+train_Y = []
+test_X = []
+test_Y = []
 i = 0
-user_sample = np.random.choice(user_dict.keys(),10)
-for user in user_sample:
-	i += 1
-	print i
-	user_comments = np.random.choice(user_dict[user],USER_TRAIN_TEST_SIZE) 
-	train_comments,test_comments = np.array_split(user_comments,2)
-	combined_comment = ""
-	for comment in train_comments:
-		combined_comment = combined_comment + " " + comment['text']
-	#print combined_comment
-	user_features = extract_features(combined_comment)
-	train_comment_features.append(user_features)
-	train_comment_users.append(user)
-	combined_comment = ""
-	for comment in test_comments:
-		combined_comment += " " + comment['text']
-	user_features = extract_features(combined_comment)
-	test_comment_features.append(user_features)
-	test_comment_users.append(user)
-	if i == 10:
-		break
+for user in user_dict:
+	num_comments = len(user_dict[user])
+	features = user_dict[user]
+	random.shuffle(features)
+	train,test = np.array_split(features,2)
+	for x in train:
+		train_X.append(x)
+		train_Y.append(user)
+	for x in test:
+		test_X.append(x)
+		test_Y.append(user)
 
+print "Number of training examples:",len(train_X)
+print "Number of test examples:",len(test_X)
 
 logreg = LogisticRegression()
-logreg.fit(train_comment_features,train_comment_users)
-predictions = logreg.predict(test_comment_features)
-micro_precision,micro_recall,micro_fbeta_score,micro_support = precision_recall_fscore_support(test_comment_users, predictions, average='micro')
+logreg.fit(train_X,train_Y)
+predictions = logreg.predict(test_X)
+micro_precision,micro_recall,micro_fbeta_score,micro_support = precision_recall_fscore_support(test_Y, predictions, average='micro')
 if verbose:
 	print "\tPrecision:%f\n\tRecall:%f" % (micro_precision,micro_recall)
-macro_precision,macro_recall,macro_fbeta_score,macro_support = precision_recall_fscore_support(test_comment_users, predictions, average='macro')
+macro_precision,macro_recall,macro_fbeta_score,macro_support = precision_recall_fscore_support(test_Y, predictions, average='macro')
 if verbose:
 	print "\tPrecision:%f\n\tRecall:%f" % (macro_precision,macro_recall)
+output_file = open("multi_user_results.csv","w")
 output_file.write("%f,%f,%f,%f\n" %(micro_precision,micro_recall,macro_precision,macro_recall))
