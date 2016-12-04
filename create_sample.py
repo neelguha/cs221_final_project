@@ -2,7 +2,9 @@
 from collections import defaultdict
 import numpy as np
 
-SAMPLE_SIZE = 100
+NUM_USERS = 100
+MIN_COMMENTS = 100
+NUM_COMMENTS = 50
 
 
 user_list = defaultdict(list)
@@ -20,14 +22,15 @@ print len(user_list)
 
 users_to_sample_from = []
 for user in user_list:
-	if len(user_list[user]) >= 50: 
+	if len(user_list[user]) >= MIN_COMMENTS: 
 		users_to_sample_from.append(user)
 
-sampled_users = np.random.choice(users_to_sample_from,100)
+sampled_users = np.random.choice(users_to_sample_from,NUM_USERS)
 output_file = open("sampled_users.tsv","w")
 print len(sampled_users)
 for user in sampled_users:
-	for comment in user_list[user]:
+	sample_comments = np.random.choice(user_list[user],NUM_COMMENTS)
+	for comment in sample_comments:
 		to_write = "%s\t%s\t%s\t%s\n" % (comment['author_id'],comment['comment_id'],comment['timestamp'],comment['text'])
 		output_file.write(to_write)
 
