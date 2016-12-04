@@ -1,8 +1,12 @@
 from fg_util import *
 import random
+import tfidf_util
 # Given a set of comments, returns a feature vector representing those comments
 
-def extract_features(comment):
+def extract_tfidf(comment, tfidf):
+	tfidfScore = tfidf.entities(comment)
+
+def extract_features(comment, tfidf):
 	stats = TextStats(comment)
 	logWordCount = stats.log_word_count()
 	maxWordLen = stats.max_word_len()
