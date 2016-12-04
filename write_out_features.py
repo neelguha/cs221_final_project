@@ -52,8 +52,7 @@ def write_out_user_split_features():
 		for var in test_features:
 			output_file.write("%f," % var)
 		output_file.write("\n")
-		break
 
-write_out_comment_features()
+#write_out_comment_features()
 write_out_user_split_features()
 		
