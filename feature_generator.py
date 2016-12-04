@@ -1,6 +1,10 @@
 from fg_util import *
 import random
 # Given a set of comments, returns a feature vector representing those comments
+
+
+
+
 def extract_features(comment):
 	stats = TextStats(comment)
 	logWordCount = stats.log_word_count()
@@ -22,7 +26,7 @@ def extract_features(comment):
 		#'sentiment': sentimentScore
 	}
 	#for name in entityNames:
-	#	result[('entity', name)] = 1
+		#result[('entity', name)] = 1
 
 	return [v for k,v in result.items()]
 
