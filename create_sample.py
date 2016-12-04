@@ -5,7 +5,7 @@ import numpy as np
 NUM_USERS = 100
 MIN_COMMENTS = 100
 NUM_COMMENTS = 50
-
+MIN_WORDS_PER_COMMENT = 50
 
 user_list = defaultdict(list)
 
@@ -16,6 +16,8 @@ for line in open("politics_subreddit/politics.tsv"):
 	author_id = items[5]
 	text = items[9]
 	text= text.replace("<EOS>",".")
+	if len(text.split(" ")) < MIN_WORDS_PER_COMMENT:
+		continue
 	user_dict = {"timestamp":timestamp,"comment_id":comment_id,"author_id":author_id,"text":text}
 	user_list[author_id].append(user_dict)
 print len(user_list)

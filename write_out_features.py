@@ -2,6 +2,7 @@
 
 from feature_generator import *
 from collections import defaultdict
+from sklearn.feature_extraction import DictVectorizer
 import numpy as np
 # Writes out a feature vector for each comment
 def write_out_comment_features():
@@ -9,15 +10,25 @@ def write_out_comment_features():
 	all_comments = []
 	all_users  = []
 	all_features = []
-	output_file = open("sampled_users_features.tsv","w")
+	v = DictVectorizer(sparse=False)
+	i = 0
 	for line in open("sampled_users.tsv"):
+		i += 1
 		if line[0] == "#": continue
 		author_id,comment_id,timestamp,text = line.strip().split("\t")
-		feature = extract_features(text)
-		output_file.write(line.strip()+"\t")
-		for var in feature:
+		feature_dict = extract_features(text)
+		all_features.append(feature_dict)
+		all_users.append(author_id)
+		if i % 100 == 0:
+			print i
+	X = v.fit_transform(all_features)
+	output_file = open("sampled_users_features.tsv","w")
+	for i in range(len(X)):
+		output_file.write("%s," % all_users[i])
+		for var in X[i]:
 			output_file.write("%f," % var)
 		output_file.write("\n")
+	print v.get_feature_names()
 
 # Takes a user's comments, splits them into two sets and writes out a feature vector for each set. 
 def write_out_user_split_features():
@@ -53,6 +64,6 @@ def write_out_user_split_features():
 			output_file.write("%f," % var)
 		output_file.write("\n")
 
-#write_out_comment_features()
-write_out_user_split_features()
+write_out_comment_features()
+#write_out_user_split_features()
 		
