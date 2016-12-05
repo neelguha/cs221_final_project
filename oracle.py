@@ -30,7 +30,7 @@ for line in open("sampled_users.tsv"):
 	index += 1
 
 users_to_test = np.random.choice(user_dict.keys(),USERS_TO_TRACK,replace = False)
-output_file = open("single_user_results.csv","w")
+output_file = open("single_user_results_oracle.csv","w")
 tfidf = tfidf_util.TFIDF(comment['text'] for comment in all_comments)
 
 precisionScore = 0.0
@@ -52,13 +52,13 @@ for user in users_to_test:
 	logreg = LogisticRegression()
 	dv = DictVectorizer(sparse=True)
 
-	all_train = list(user_train) + list(other_train)
+	all_train = list(user_train) + list(user_test) + list(other_train) + list(other_test)
 	all_train = dv.fit_transform(all_train)
-	train_vals = [True]*len(user_train) + [False]*len(other_train)
+	train_vals = [True]*len(user_features) + [False]*len(other_features)
 	logreg.fit(all_train,train_vals)
 
 	all_test = list(user_test) + list(other_test)
-	all_test = dv.transform(all_test) #ONLY DO TRANSFORM AND NOT FIT FOR TEST VALS
+	all_test = dv.transform(all_test)
 	test_vals = [True]*len(user_test) + [False]*len(other_test)
 	predictions = logreg.predict(all_test)
 	precision,recall,fbeta_score,support = precision_recall_fscore_support(test_vals, predictions, average='binary')
