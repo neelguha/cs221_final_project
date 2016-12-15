@@ -1,7 +1,7 @@
 # Large data files
 politics_subreddit/*
 *.tar.gz
-
+sampled_users_features.tsv
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
