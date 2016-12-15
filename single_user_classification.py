@@ -12,8 +12,8 @@ import tfidf_util
 from feature_generator import *
 
 USERS_TO_TRACK = 20 # Number of users to build classifier for
-USER_TRAIN_TEST_SIZE = 40 # Number of target user's comments to train 
-OTHER_TRAIN_TEST_SIZE = 40 # Number of comments to include from users in train/test
+USER_TRAIN_TEST_SIZE = 50 # Number of target user's comments to train 
+OTHER_TRAIN_TEST_SIZE = 50 # Number of comments to include from users in train/test
 verbose = True
 
 user_dict = defaultdict(list)
