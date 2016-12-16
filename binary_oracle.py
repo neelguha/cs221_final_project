@@ -11,7 +11,7 @@ from sklearn.linear_model import LogisticRegression
 import tfidf_util
 from feature_generator import *
 
-USERS_TO_TRACK = 20 # Number of users to build classifier for
+USERS_TO_TRACK = 100 # Number of users to build classifier for
 USER_TRAIN_TEST_SIZE = 40 # Number of target user's comments to train 
 OTHER_TRAIN_TEST_SIZE = 40 # Number of comments to include from users in train/test
 verbose = True
@@ -30,7 +30,8 @@ for line in open("sampled_users.tsv"):
 	index += 1
 
 users_to_test = np.random.choice(user_dict.keys(),USERS_TO_TRACK,replace = False)
-output_file = open("single_user_results_baseline.csv","w")
+output_file = open("single_user_results_oracle.csv","w")
+tfidf = tfidf_util.TFIDF(comment['text'] for comment in all_comments)
 
 precisionScore = 0.0
 recallScore = 0.0
@@ -40,21 +41,24 @@ for user in users_to_test:
 	user_features = []
 	user_comments = np.random.choice(user_dict[user],USER_TRAIN_TEST_SIZE) 
 	for comment in user_comments:
-		user_features.append([len(comment['text'].split(" "))])
+		user_features.append(extract_features(comment, tfidf))
 	other_comments = np.random.choice([comment for comment in all_comments if comment['author_id'] != user],OTHER_TRAIN_TEST_SIZE) 
 	other_features = []
 	for comment in other_comments:
-		other_features.append([len(comment['text'].split(" "))])
+		other_features.append(extract_features(comment, tfidf))
 	user_train,user_test = np.array_split(user_features,2)
 	other_train,other_test = np.array_split(other_features,2)
 
 	logreg = LogisticRegression()
+	dv = DictVectorizer(sparse=True)
 
-	all_train = list(user_train) + list(other_train)
-	train_vals = [True]*len(user_train) + [False]*len(other_train)
+	all_train = list(user_train) + list(user_test) + list(other_train) + list(other_test)
+	all_train = dv.fit_transform(all_train)
+	train_vals = [True]*len(user_features) + [False]*len(other_features)
 	logreg.fit(all_train,train_vals)
 
 	all_test = list(user_test) + list(other_test)
+	all_test = dv.transform(all_test)
 	test_vals = [True]*len(user_test) + [False]*len(other_test)
 	predictions = logreg.predict(all_test)
 	precision,recall,fbeta_score,support = precision_recall_fscore_support(test_vals, predictions, average='binary')
@@ -67,3 +71,4 @@ for user in users_to_test:
 if verbose:
 	print "Avg Precision:%f\n\tAvg Recall:%f" % (precisionScore/len(users_to_test), recallScore/len(users_to_test))
 output_file.write("Avg:%f,%f" % (precisionScore/len(users_to_test), recallScore/len(users_to_test)))
+

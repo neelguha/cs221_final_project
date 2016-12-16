@@ -26,14 +26,41 @@ For each comment in our sample, generate the corresponding feature vector and wr
 
 Runs binary classification on all users and reports the average precision/recall. Adjusting flags in the script control which model (Naive Bayes, SVM, etc) is used.  
 
+2. python binary_baseline.py 
+
+Runs and reports the results of the binary baseline model. 
+
+3. python binary_oracle.py 
+
+Runs and reports the results of the binary oracle. 
 
 ### Multiclass Classification 
 
+1. python multi_user_classification.py 
 
+Runs binary classification on all users and reports the micro/macro precision/recall. Adjusting flags in the script control which model (Naive Bayes, etc) is used.  
+
+2. python multi_baseline.py 
+
+Runs and reports the results of the multiclass baseline model. 
+
+3. python multi_oracle.py 
+
+Runs and reports the results of the multiclass oracle. 
 
 ### Unsupervised Methods
 
+1. python unsupervised_clustering.py 
 
+Runs binary classification on all users and reports the micro/macro precision/recall. Adjusting flags in the script control which model (Naive Bayes, etc) is used.  
+
+2. python unsupervised_clustering_baseline.py 
+
+Runs and reports the results of the multiclass baseline model. 
+
+3. python unsupervised_clustering_oracle.py 
+
+Runs and reports the results of the multiclass oracle. 
 
 
 
