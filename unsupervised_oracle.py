@@ -1,4 +1,14 @@
-# Take a sample of comments from a sample of users, see how well a human can sort them.
+# Single User Classification 
+# Constructs a unique classifier for each user and evaluates a sample of comments 
+# to determine which came from the user and which didn't
+from sklearn import metrics
+from collections import defaultdict
+import numpy as np
+import random
+from feature_generator import *
+from sklearn.metrics import precision_recall_fscore_support
+from sklearn import svm
+from sklearn.cluster import KMeans
 
 user_dict = defaultdict(list)
 all_comments = []
@@ -13,5 +23,25 @@ for line in open("sampled_users.tsv"):
 	all_comments.append(comment_dict)
 	index += 1
 
+all_X = []
+all_Y= []
+#i = len(user_dict.keys())
+i = 100
+kmeans = KMeans(n_clusters=i, random_state=0)
+to_fit = []
+users_to_test = np.random.choice(user_dict.keys(),i)
+for user in users_to_test:
+	num_comments = len(user_dict[user])
+	comments = user_dict[user]
+	np.random.shuffle(comments)
+	for i,comment in enumerate(comments):
+		if i == 0:
+			to_fit.append([len(comment['text'].split(" "))])
+			continue
+		all_X.append([len(comment['text'].split(" "))])
+		all_Y.append(user)
 
-users_to_test = np.random.choice(user_dict.keys(),USERS_TO_TRACK,replace = False)
+
+kmeans.fit(to_fit)
+predictions = kmeans.predict(all_X)
+print metrics.adjusted_rand_score(all_Y,predictions)
