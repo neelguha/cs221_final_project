@@ -20,7 +20,7 @@ user_dict = defaultdict(list)
 all_comments = []
 all_users  = []
 index = 0
-for line in open("sampled_users.tsv"):
+for line in open("data/sampled_users.tsv"):
 	if line[0] == "#": continue
 	author_id,comment_id,timestamp,text = line.strip().split("\t")
 	comment_dict = {'author_id':author_id,'index':index,'timestamp':timestamp,'text':text}
