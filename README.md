@@ -38,7 +38,7 @@ Runs and reports the results of the binary oracle.
 
 1. python multi_user_classification.py 
 
-Runs binary classification on all users and reports the micro/macro precision/recall. Adjusting flags in the script control which model (Naive Bayes, etc) is used.  
+Runs multiclass classification on all users and reports the micro/macro precision/recall. Adjusting flags in the script control which model (Naive Bayes, etc) is used.  
 
 2. python multi_baseline.py 
 
@@ -52,23 +52,18 @@ Runs and reports the results of the multiclass oracle.
 
 1. python unsupervised_clustering.py 
 
-Runs binary classification on all users and reports the micro/macro precision/recall. Adjusting flags in the script control which model (Naive Bayes, etc) is used.  
+Runs k-means on all users and reports the micro/macro precision/recall. Adjusting flags in the script control which model (Naive Bayes, etc) is used.  
 
 2. python unsupervised_clustering_baseline.py 
 
-Runs and reports the results of the multiclass baseline model. 
+Runs and reports the results of the unsupervised baseline model. 
 
 3. python unsupervised_clustering_oracle.py 
 
-Runs and reports the results of the multiclass oracle. 
+Runs and reports the results of the unsupervised oracle. 
 
 
-
-
-
-
-
-Data Files 
+## Data Files 
 
 1. data/politics.tsv 
 Contains all comments on /r/politics from 2014. Data is in the form of
@@ -76,21 +71,3 @@ Contains all comments on /r/politics from 2014. Data is in the form of
 <subreddit_name>  <time_stamp>  <subreddit_id>  <comment_id>  <parent_comment_id> <author_name> <score> <???> <thread/link_id> <text>
 
 
-
-
-
-
-
-
-
-
-Scripts 
-sample\_statistics.py: Reads in sampled\_users.tsv and outputs statistics about the data set (number of users, average number of comments, etc)
-single\_user\_classification.py: Trains and tests a classifier for a single user
-multi\_user\_classification.py: Trains and tests multiclass classifier for a sample of 10 users 
-write\_out_features.py: Writes out feature vectors for all users in samples 
-
-Data 
-sampled_users.tsv: sample of users we run all our stuff on 
-sampled\_users_features.tsv: feature vectors for all users 
-sampled\_users_\split_features.tsv: split comments for each users into to sets, generated feature vectors for each 
