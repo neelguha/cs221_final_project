@@ -10,7 +10,6 @@ from sklearn.metrics import precision_recall_fscore_support
 from sklearn import svm
 from sklearn.cluster import KMeans
 
-
 verbose = True
 
 user_dict = defaultdict(list)
@@ -22,9 +21,9 @@ for line in open("sampled_users_features.tsv"):
 
 all_X = []
 all_Y= []
-#i = len(user_dict.keys())
-i = 100
-users_to_test = np.random.choice(user_dict.keys(),i)
+
+i = len(user_dict)
+users_to_test = np.random.choice(user_dict.keys(),i,replace=False)
 for user in users_to_test:
 	num_comments = len(user_dict[user])
 	features = user_dict[user]

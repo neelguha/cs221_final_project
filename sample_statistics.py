@@ -14,8 +14,6 @@ for line in open("sampled_users.tsv"):
 	all_users.append(author_id)	
 	all_comments.append(text)
 
-
-
 # TODO: Add statistics about how many posts these comments span
 print "Number of users: %d" % len(user_dict)
 print "Number of comments: %d" % len(all_comments)

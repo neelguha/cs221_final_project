@@ -27,6 +27,9 @@ for line in open("sampled_users_features.tsv"):
 	user,feature_text = line.strip().split("\t")
 	features = feature_text.split(",")
 	features = [float(x) for x in features if len(x) > 0]
+	# Selectively drop a feature
+	i = 6
+	features = features[:i]
 	user_dict[user].append(features)
 	all_users.append(user)	
 	all_features.append(features)
@@ -53,16 +56,9 @@ for user in users_to_test:
 	train_vals = [True]*len(user_train) + [False]*len(other_train)
 	all_test = list(user_test) + list(other_test)
 	test_vals = [True]*len(user_test) + [False]*len(other_test)
-	
-	logreg = LogisticRegression()
-	logreg.fit(all_train,train_vals)
-	predictions = logreg.predict(all_test)
-	#clf = svm.SVC()
-	#clf.fit(all_train, train_vals)  
-	#predictions = clf.predict(all_test)
-	#gnb = GaussianNB()
-	#gnb.fit(all_train,train_vals)
-	#predictions = gnb.predict(all_test)
+	gnb = GaussianNB()
+	gnb.fit(all_train,train_vals)
+	predictions = gnb.predict(all_test)
 
 	precision,recall,fbeta_score,support = precision_recall_fscore_support(test_vals, predictions, average='binary')
 	if verbose:
