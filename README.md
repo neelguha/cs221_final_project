@@ -68,6 +68,6 @@ Runs and reports the results of the unsupervised oracle.
 1. data/politics.tsv 
 Contains all comments on /r/politics from 2014. Data is in the form of
 
-<subreddit_name>  <time_stamp>  <subreddit_id>  <comment_id>  <parent_comment_id> <author_name> <score> <???> <thread/link_id> <text>
+"<subreddit_name>  <time_stamp>  <subreddit_id>  <comment_id>  <parent_comment_id> <author_name> <score> <???> <thread/link_id> <text>"
 
 
