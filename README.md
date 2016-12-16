@@ -15,7 +15,7 @@ Commands for data processing/feature generation.
 
 Samples a set of users and a set of comments from those users from the file data/politics.tsv. Writes the results out to sampled_users.tsv
 
-2. python feature_generator.py 
+2. python write_out_features.py 
 
 For each comment in our sample, generate the corresponding feature vector and write out the feature vector to data/sampled_users.tsv.
 
@@ -62,6 +62,21 @@ Runs and reports the results of the unsupervised baseline model.
 
 Runs and reports the results of the unsupervised oracle. 
 
+### Misc Commands
+
+1. python sample_statistics.py 
+
+Provides some statistics about the sample of comments. 
+
+2. python feature_importance.py 
+
+Used to calculate predictiveness of each feature in the binary classification model. 
+
+## Misc Scripts 
+
+1. tfidf_util, spelling.py, syllables_en.py,profanity.py,fg_util.py 
+
+Scripts used to generate the features. All called in write_out_features.py. 
 
 ## Data Files 
 

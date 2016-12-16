@@ -12,7 +12,6 @@ def extract_features(comment, tfidf):
 	numSpellingErrors = stats.num_spelling_errors()
 	punctScore = stats.punctuation_score()
 	profanityScore = stats.profanity_score()
-	#sentimentScore = stats.sentiment_score()
 	entityNames = tfidf.entities(comment['index'])
 	
 	result = {
@@ -22,7 +21,6 @@ def extract_features(comment, tfidf):
 		'num_spelling_errs': numSpellingErrors,
 		'punctuation_measure': punctScore,
 		'profanity': profanityScore,
-		#'sentiment': sentimentScore
 	}
 	for name in entityNames:
 		result[('entity', name)] = 1
