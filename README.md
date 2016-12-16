@@ -5,7 +5,9 @@
 
 This directory contains our scripts and data for this project. Below is a description of how to run the experiments. Because we took samples, replicating the entire process may lead to results that vary slightly from those described in the paper.
 
+## Commands to run 
 
+The following are commands to run that roughly outline our pipeline.
 
 ### Data Pre-processing
 

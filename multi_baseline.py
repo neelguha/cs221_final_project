@@ -15,7 +15,7 @@ user_dict = defaultdict(list)
 all_comments = []
 all_users  = []
 index = 0
-for line in open("sampled_users.tsv"):
+for line in open("data/sampled_users.tsv"):
 	if line[0] == "#": continue
 	author_id,comment_id,timestamp,text = line.strip().split("\t")
 	comment_dict = {'author_id':author_id,'index':index,'timestamp':timestamp,'text':text}
@@ -62,5 +62,5 @@ if verbose:
 macro_precision,macro_recall,macro_fbeta_score,macro_support = precision_recall_fscore_support(test_Y, predictions, average='macro')
 if verbose:
 	print "Macro Precision:%f\nMacro Recall:%f" % (macro_precision,macro_recall)
-output_file = open("multi_user_results.csv","w")
+output_file = open("data/multi_user_results.csv","w")
 output_file.write("%f,%f,%f,%f\n" %(micro_precision,micro_recall,macro_precision,macro_recall))
