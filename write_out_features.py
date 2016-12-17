@@ -4,8 +4,18 @@ from feature_generator import *
 from collections import defaultdict
 from sklearn.feature_extraction import DictVectorizer
 import numpy as np
+import tfidf_util
 # Writes out a feature vector for each comment
-def write_out_comment_features():
+
+def standardize(X):
+	for col in range(6): #num of non entity features
+		x = X[:, col]
+		if np.std(x) != 0:
+			X[:, col] = (x - np.mean(x))/np.std(x)
+		else:
+			X[:, col] = (x - np.mean(x))
+
+def output_features():
 	user_dict = defaultdict(list)
 	all_comments = []
 	all_users  = []
@@ -16,20 +26,27 @@ def write_out_comment_features():
 		i += 1
 		if line[0] == "#": continue
 		author_id,comment_id,timestamp,text = line.strip().split("\t")
-		feature_dict = extract_features(text)
+		comment_dict = {'author_id':author_id,'index':index,'timestamp':timestamp,'text':text}
+		user_dict[author_id].append(comment_dict)
+		all_users.append(author_id)	
+		all_comments.append(comment_dict)
+		index += 1
+
+	tfidf = tfidf_util.TFIDF(comment['text'] for comment in all_comments)
+	all_features = []
+	for comment in all_comments:
+		feature_dict = extract_features(comment, tfidf)
 		all_features.append(feature_dict)
-		all_users.append(author_id)
-		if i % 100 == 0:
-			print i
+
+	v = DictVectorizer(sparse=False)
 	X = v.fit_transform(all_features)
-	output_file = open("data/sampled_users_features.tsv","w")
-	for i in range(len(X)):
-		output_file.write("%s," % all_users[i])
+	standardize(X)
+	#output_file = open("sampled_users_features.tsv","w")
+	output_file = open("sampled_users_features_standardized.tsv","w")
+	for i in range(len(all_comments)):
+		output_file.write("%s\t" % all_users[i])
 		for var in X[i]:
 			output_file.write("%f," % var)
 		output_file.write("\n")
-	print v.get_feature_names()
 
-write_out_comment_features()
-
-		
+output_features()

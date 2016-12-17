@@ -15,8 +15,18 @@ verbose = True
 
 user_dict = defaultdict(list)
 for line in open("sampled_users_features.tsv"):
+<<<<<<< HEAD
+<<<<<<< HEAD
+	user, features = line.strip().split("\t")
+	feature_vector = features.strip().split(",")
+=======
 	user,feature_text = line.strip().split("\t")
 	feature_vector = feature_text.strip().split(",")
+>>>>>>> cf8808851adf44ed733cd29fd9cbc0060230b514
+=======
+	user,feature_text = line.strip().split("\t")
+	feature_vector = feature_text.strip().split(",")
+>>>>>>> cf8808851adf44ed733cd29fd9cbc0060230b514
 	feature_vector = [float(x) for x in feature_vector if len(x) > 0]
 	user_dict[user].append(feature_vector)
 
